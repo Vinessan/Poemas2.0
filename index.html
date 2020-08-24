@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <link rel="shortcut icon" href="https://image.flaticon.com/icons/svg/864/864702.svg" type="image/x-icon">
+    <link rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poemas e Cultuta</title>
+</head>
+
+<style>
+    body {
+        background: rgb(247, 217, 183);
+    }
+
+    #bg_text {
+        position: absolute;
+        background: rgb(247, 204, 155);
+        width: 30em;
+        height: 20em;
+        top: 20em;
+        left: 47em;
+        border-radius: 5em 2em 5em 2em;
+    }
+
+    #title {
+        position: absolute;
+        top: 2em;
+        left: 25em;
+        color: rgb(54, 29, 4);
+    }
+
+    #tile_sub {
+        position: absolute;
+        top: 17em;
+        left: 38em;
+    }
+
+    #option_poems {
+        position: absolute;
+        top: 22em;
+        left: 86em;
+        outline: none;
+    }
+
+    #poem_area {
+        position: absolute;
+        top: 23em;
+        left: 50em;
+    }
+</style>
+
+<body>
+    <header>
+        <div id="bg_text"></div>
+        <div>
+            <h1 id="title">POEMAS PARA LEITURA</h1>
+        </div>
+        <div id="tile_sub">
+            <h3>Para ler alguns de nossos poemas, escolha ao lado qual deseja ler:</h3>
+        </div>
+        <div>
+            <select id="option_poems" onchange="loadPoem(this)">
+                <option></option>
+                <option value="1">Poema 1</option>
+                <option value="2">Poema 2</option>
+                <option value="3">Poema 3</option>
+                <option value="4">Poema 4</option>
+            </select>
+        </div>
+        <div>
+            <p id="poem_area"></p>
+        </div>
+    </header>
+</body>
+<script>
+    function loadPoem(elen) {
+        const obj = {
+            poemId: elen.value
+        }
+
+        const obj_json = JSON.stringify(obj);
+
+        console.log(obj_json);
+
+        const xhr = new XMLHttpRequest;
+
+        xhr.open('POST', 'https://beginner-api.herokuapp.com/getpoem');
+
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function () {
+            if (this.status == 200 && this.readyState == 4) {
+                const poem_obj = JSON.parse(xhr.responseText);
+                console.log(poem_obj);
+
+                document.getElementById('poem_area').innerText = poem_obj.body
+            }
+        }
+
+        xhr.send(obj_json);
+    }
+</script>
+
+</html>
